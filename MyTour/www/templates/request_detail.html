@@ -1,0 +1,34 @@
+<ion-view title="{{title}}">
+
+  <ion-content ng-controller="requestDetailCtrl" class="request-detail-wrapper">
+
+    <div ng-repeat="data in requestData.myRequests">
+    	<div class="top-section">
+    	  <div class="top-left">
+    		<h2>{{data.depart_from}} to {{data.destination}}</h2>
+    		<p>1 May 2016</p>
+    	  </div>
+
+    	  <div class="top-right">
+    	  	<p>Status</p>
+    	  	<p>Approval Pending</p>
+    	  </div>
+    	</div>
+
+      <div class="detailed-view-wrapper">
+        <p>Request details:</p>
+        <div class="details">
+      	<p>Request No: <strong>2334</strong></p>
+      	<p>Travel From: <strong>{{data.depart_from}}</strong></p>
+      	<p>Travel To: <strong>{{data.destination}}</strong></p>
+      	<p>Travel Date: <strong>{{data.departure_date}}</strong></p>
+      	<p>Travel Mode: <strong>{{data.mode}}</strong></p>
+      	<p>Ticket No: <strong>1343</strong></p>
+      	<p>Ticket Date: <strong>20/9/2016</strong></p>
+        </div>
+      </div>
+    </div>
+
+  </ion-content>
+
+</ion-view>

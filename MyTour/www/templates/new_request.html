@@ -1,0 +1,124 @@
+<ion-view title="{{title}}">
+
+  <ion-content ng-controller="newRequestCtrl" class="new-request-wrapper">
+
+    <div class="content-wrapper">
+
+      <form name="requestForm" class="requestForm" novalidate ng-submit="requestFormSubmit(requestForm.$valid)">
+
+        <div class="list">
+
+        	<div class="item" ng-class="{ 'has-error' : (requestForm.visitPurpose.$invalid && submitted && !visitPurposefocused)}">
+            <label class="item-input">
+              <div class="input-label">Purpose of the visit</div>
+              <input type="text" placeholder="" name="visitPurpose" ng-model="visitPurpose" ng-required="true" ng-focus="visitPurposefocused=true" ng-blur="visitPurposefocused=false" />
+            </label>
+            <p class="error help-block" ng-show="requestForm.visitPurpose.$error.required && submitted && !visitPurposefocused">Please enter Visit Purpose.</p>
+          </div>
+
+          <div class="item" ng-class="{ 'has-error' : (submitted && !validateFromStatus)}">
+            <label class="item-input item-select">
+              <div class="input-label">From</div>
+              <select ng-change="validateFromPlace()" ng-model="fromPlace">
+                <option value="">Please Select</option>
+                <option value="mumbai">Mumbai</option>
+                <option value="pune">Pune</option>
+                <option value="banglore">Banglore</option>
+              </select>
+            </label>
+            <p class="error help-block" ng-show="submitted && !validateFromStatus">Please select Depart From place.</p>
+          </div>
+
+          <div class="item" ng-class="{ 'has-error' : (submitted && !validateDestinationStatus)}">
+            <label class="item-input item-select">
+              <div class="input-label">Destination</div>
+              <select ng-change="validateDestination()" ng-model="destination">
+                <option value="">Please Select</option>
+                <option value="mumbai">Mumbai</option>
+                <option value="pune">Pune</option>
+                <option value="banglore">Banglore</option>
+              </select>
+            </label>
+            <p class="error help-block" ng-show="submitted && !validateDestinationStatus">Please select Destination.</p>
+          </div>
+
+          <div class="item" ng-class="{ 'has-error' : (requestForm.departureDate.$invalid && submitted && !departureDatefocused)}">
+            <label class="item-input">
+            <div class="input-label">Departure Date</div>
+              <input type="date" name="departureDate" ng-model="departureDate" ng-required="true" ng-focus="departureDatefocused=true" ng-blur="departureDatefocused=false" required="required" />
+            </label>
+            <p class="error help-block" ng-show="requestForm.departureDate.$error.required && submitted && !departureDatefocused">Please select Departure Date.</p>
+          </div>
+
+          <div class="item" ng-class="{ 'has-error' : (requestForm.departureTime.$invalid && submitted && !departureTimefocused)}">
+            <label class="item-input">
+              <div class="input-label">Departure Time</div>
+              <input type="time" name="departureTime" ng-model="departureTime" ng-required="true" ng-focus="departureTimefocused=true" ng-blur="departureTimefocused=false" required="required" />
+            </label>
+            <p class="error help-block" ng-show="requestForm.departureTime.$error.required && submitted && !departureTimefocused">Please select Departure Time.</p>
+          </div>
+
+          <div class="item" ng-class="{ 'has-error' : (loginForm.password.$invalid && submitted && !pwdfocused)}">
+            <label class="item-input">
+              <div class="input-label">Accommodation Required</div>
+              <label class="toggle toggle-positive">
+                <input type="checkbox" ng-model="accomodationStatus">
+                <div class="track">
+                  <div class="handle"></div>
+                </div>
+              </label>
+            </label>
+          </div>
+
+          <div ng-show="accomodationStatus" class="item" ng-class="{ 'has-error' : (requestForm.accomodationDate.$invalid && submitted
+          && !accomodationDatefocused)}">
+            <label class="item-input">
+              <div class="input-label">Accomodation From Date</div>
+              <input type="date" name="accomodationDate" ng-model="accomodationDate" ng-focus="accomodationDatefocused=true" ng-blur="accomodationDatefocused=false" />
+            </label>
+            <p class="error help-block" ng-show="requestForm.accomodationDate.$error.required && submitted && !accomodationDatefocused">Please select Accomodation From Date.</p>
+          </div>
+
+          <div ng-show="accomodationStatus" class="item" ng-class="{ 'has-error' : (requestForm.accomodationTime.$invalid && submitted
+          && !accomodationTimefocused)}">
+            <label class="item-input">
+              <div class="input-label">Accomodation To Date</div>
+              <input type="date" name="accomodationTime" ng-model="accomodationTime" ng-focus="accomodationTimefocused=true" ng-blur="accomodationTimefocused=false" />
+            </label>
+            <p class="error help-block" ng-show="requestForm.accomodationTime.$error.required && submitted && !accomodationTimefocused">Please select Accomodation To Date.</p>
+          </div>
+
+          <div class="item" ng-class="{ 'has-error' : (loginForm.password.$invalid && submitted && !pwdfocused)}">
+            <label class="item-input">
+              <div class="input-label">Transportation Required</div>
+              <label class="toggle toggle-positive">
+                <input type="checkbox" ng-model=transportationStatus>
+                <div class="track">
+                  <div class="handle"></div>
+                </div>
+              </label>
+            </label>
+          </div>
+
+          <div class="item" ng-class="{ 'has-error' : (submitted && !validateApproverStatus)}">
+            <label class="item-input item-select">
+              <div class="input-label">Select Your Approver</div>
+              <select ng-change="validateApprover()" ng-model="approver">
+                <option value="">Please Select</option>
+                <option value="leenadas">Leena Das</option>
+                <option value="leenadas">Leena Das</option>
+                <option value="leenadas">Leena Das</option>
+              </select>
+            </label>
+            <p class="error help-block" ng-show="submitted && !validateApproverStatus">Please select Approver.</p>
+          </div>
+
+          <button type="submit" class="button submit-button button-block button-positive">Submit</button>
+        </div>
+      </form>
+
+    </div>
+
+  </ion-content>
+
+</ion-view>

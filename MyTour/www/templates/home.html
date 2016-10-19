@@ -1,0 +1,42 @@
+<ion-view title="{{title}}">
+
+  <ion-nav-buttons side="left">
+  	<button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+
+  <ion-content ng-controller="homeCtrl" class="home-wrapper has-header">
+    <div class="content-wrapper">
+	    <h3 class="page-subtitle">Plan your business tour</h3>
+
+	    <div class="travel-mode-icons-wrapper">
+	      <div class="top-section clearfix">
+	    	<div class="travel-icon" ng-click="createRequest('air');">
+	    		<img src="img/air.png" width="100" />
+	    		<p class="mode-text">Air</p>
+	    	</div>
+	    	<div class="travel-icon" ng-click="createRequest('rail');">
+	    		<img src="img/rail.png" width="100" />
+	    		<p class="mode-text">Rail</p>
+	    	</div>
+	      </div>
+	      <div class="bottom-section clearfix">
+	    	<div class="travel-icon" ng-click="createRequest('car');">
+	    		<img src="img/car.png" width="100" />
+	    		<p class="mode-text">Car</p>
+	    	</div>
+	    	<div class="travel-icon" ng-click="createRequest('bus');">
+	    		<img src="img/bus.png" width="100" />
+	    		<p class="mode-text">Bus</p>
+	    	</div>
+	      </div>
+	    </div>
+
+    </div>
+
+    <div class="tag-line">
+	  <span class="copyright-text">Copyright @ 2016</span>
+	  <img src="img/tmf-tag-line.png" width="200" />
+	</div>
+  </ion-content>
+
+</ion-view>

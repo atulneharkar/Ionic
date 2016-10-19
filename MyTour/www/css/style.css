@@ -1,0 +1,100 @@
+/* Empty. Add your own CSS if you like */
+
+.splash-wrapper { background-color: #4776db; }
+
+.splash-wrapper .splash-logo {
+	width: 205px;
+    margin: 0 auto;
+    padding: 55px 0;
+    color: #fff;
+    text-align: center;
+}
+
+.splash-wrapper .splash-logo p { margin: 0; }
+
+.splash-wrapper .splash-logo .main-logo-heading {
+	font-size: 55px;
+    font-weight: bold;
+    line-height: 60px;
+}
+
+.splash-wrapper .splash-logo .sub-logo-heading {
+	font-size: 22px;
+    text-align: right;
+    line-height: 23px;
+}
+
+.splash-wrapper .india-map-img img {
+	width: 100%;
+    height: 300px;
+    margin: 0 0 0 -12px;
+}
+
+.splash-wrapper .splashLogo {
+    padding: 60px 0 20px;
+    text-align: center;
+}
+
+.login-wrapper {
+	padding: 0 10px;
+}
+
+.login-wrapper .validationError {
+	margin-top: 5px;
+	margin-left: 15px;
+	margin-bottom: 0;
+	color: #a50202;
+}
+
+.login-wrapper .pwd-validation-error { margin-bottom: 0; }
+
+.tag-line {
+	height: 25px;
+	position: fixed;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 13px;
+    background: #fff;
+}
+
+.tag-line span, 
+.tag-line img {
+  vertical-align: middle;  
+}
+
+.login-wrapper .loginLogo {
+    padding: 60px 0 35px;
+    text-align: center;
+}
+
+.login-wrapper .login-button {
+	background-color: #faab00;
+	color: #fff;
+    font-weight: bold;
+}
+
+.login-wrapper .loginForm .input-wrapper { border-bottom: 1px solid #ddd; }
+
+.home-wrapper .content-wrapper {
+    padding: 10px;
+}
+
+.home-wrapper .content-wrapper .page-subtitle {
+    margin: 0 0 10px;
+    font-weight: normal;
+    font-size: 20px;
+    text-align: center;
+ }
+
+.home-wrapper .travel-mode-icons-wrapper .top-section > div,
+.home-wrapper .travel-mode-icons-wrapper .bottom-section > div {
+    width: 40%;
+    margin: 5%;
+    float: left;
+    text-align: center;
+}
+
+.home-wrapper .travel-mode-icons-wrapper .travel-icon { cursor: pointer; }
+
+.my-requests-wrapper .request-mode-img { margin-top: 13px; }

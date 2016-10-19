@@ -1,0 +1,16 @@
+<ion-view title="{{title}}">
+
+  <ion-content ng-controller="myRequestsCtrl" class="my-requests-wrapper">
+
+    <div class="list">
+      <a class="item item-avatar" ng-repeat="data in requestData.myRequests" ng-click="requestDetailPage(data.id, '')">
+        <img class="request-mode-img" src="img/{{data.mode}}.png" />
+        <h2>{{data.depart_from}} to {{data.destination}}</h2>
+        <p>Request Status: <strong>In Progress</strong></p>
+        <p>Request Date: <strong>12/05/2016</strong></p>
+      </a>
+    </div>
+
+  </ion-content>
+
+</ion-view>
