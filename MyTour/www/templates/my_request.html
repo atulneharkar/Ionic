@@ -1,9 +1,15 @@
 <ion-view title="{{title}}">
 
+  <ion-nav-buttons side="left">
+    <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
+  </ion-nav-buttons>
+
+  <ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
+
   <ion-content ng-controller="myRequestsCtrl" class="my-requests-wrapper">
 
     <div class="list">
-      <a class="item item-avatar" ng-repeat="data in requestData.myRequests" ng-click="requestDetailPage(data.id, '')">
+      <a class="item item-avatar" ng-repeat="data in requestData.myRequests" ng-if="data.active_status == 1" ng-click="requestDetailPage(data.id, '')">
         <img class="request-mode-img" src="img/{{data.mode}}.png" />
         <h2>{{data.depart_from}} to {{data.destination}}</h2>
         <p>Request Status: <strong>In Progress</strong></p>

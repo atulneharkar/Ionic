@@ -28,8 +28,8 @@ myApp.run(function($ionicPlatform, $cordovaSQLite) {
     // $cordovaSQLite.execute(db, "DROP TABLE MyRequest");
     // $cordovaSQLite.execute(db, "DROP TABLE PendingApproval");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Login (id integer primary key, username text, password text)");
-    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS MyRequest (id integer primary key, visit_purpose text, depart_from text, destination text, departure_date text, departure_time text, accomodation_required text, accomodation_from_date text, accomodation_to_date text, transportation_status text, approver text, mode text)");
-    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS PendingApproval (id integer primary key, username text, password text)");
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS MyRequest (id integer primary key, visit_purpose text, depart_from text, destination text, departure_date datetime, departure_time datetime, accomodation_required text, accomodation_from_date datetime, accomodation_to_date datetime, transportation_status text, approver text, mode text, active_status integer, approval_status text, remarks text)");
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS PendingApproval (id integer primary key, visit_purpose text, depart_from text, destination text, departure_date datetime, departure_time datetime, accomodation_required text, accomodation_from_date datetime, accomodation_to_date datetime, transportation_status text, approver text, mode text, active_status integer, approval_status text, remarks text)");
   });
 });
 
@@ -66,11 +66,11 @@ myApp.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) 
   })
 
   .state('app.create-request', {
-    url: '/create-request/:mode',
+    url: '/create-request/:mode/:requestId',
     views:{
       'menuContent': {
-        templateUrl: 'templates/new_request.html',
-        controller: 'newRequestCtrl'
+        templateUrl: 'templates/request_form.html',
+        controller: 'requestCtrl'
       }
     }
 
@@ -83,8 +83,8 @@ myApp.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) 
         templateUrl: 'templates/my_request.html',
         controller: 'myRequestsCtrl'
       }
-    }
-
+    },
+    cache: false
   })
 
   .state('app.request-detail', {
@@ -94,8 +94,8 @@ myApp.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) 
         templateUrl: 'templates/request_detail.html',
         controller: 'requestDetailCtrl'
       }
-    }
-
+    },
+    cache: false
   })
 
   .state('app.pending-approvals', {
@@ -105,8 +105,8 @@ myApp.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) 
         templateUrl: 'templates/pending_approvals.html',
         controller: 'pendingApprovalCtrl'
       }
-    }
-
+    },
+    cache: false
   })
 
   // if none of the above states are matched, use this as the fallback

@@ -3,40 +3,12 @@
   <ion-content ng-controller="pendingApprovalCtrl" class="pending-approval-wrapper">
 
     <div class="list">
-      <a class="item item-avatar" ng-click="requestDetailPage(2, 'approve')">
-        <img class="request-mode-img" src="img/plane.png" />
-        <h2>Leena Das</h2>
-        <p>Mumbai to Pune</p>
+      <a class="item item-avatar" ng-repeat="data in requestData.myRequests" ng-if="data.active_status == 1" ng-click="requestDetailPage(data.id, '')">
+        <img class="request-mode-img" src="img/{{data.mode}}.png" />
+        <h2>{{data.depart_from}} to {{data.destination}}</h2>
+        <p>Request Status: <strong>In Progress</strong></p>
         <p>Request Date: <strong>12/05/2016</strong></p>
-      </a>  
-
-      <a class="item item-avatar" ng-click="requestDetailPage(2, 'approve')">
-        <img class="request-mode-img" src="img/plane.png" />
-        <h2>Leena Das</h2>
-        <p>Mumbai to Pune</p>
-        <p>Request Date: <strong>12/05/2016</strong></p>
-      </a>  
-
-      <a class="item item-avatar" ng-click="requestDetailPage(2, 'approve')">
-        <img class="request-mode-img" src="img/plane.png" />
-        <h2>Leena Das</h2>
-        <p>Mumbai to Pune</p>
-        <p>Request Date: <strong>12/05/2016</strong></p>
-      </a>  
-
-      <a class="item item-avatar" ng-click="requestDetailPage(2, 'approve')">
-        <img class="request-mode-img" src="img/plane.png" />
-        <h2>Leena Das</h2>
-        <p>Mumbai to Pune</p>
-        <p>Request Date: <strong>12/05/2016</strong></p>
-      </a>  
-
-      <a class="item item-avatar" ng-click="requestDetailPage(2, 'approve')">
-        <img class="request-mode-img" src="img/plane.png" />
-        <h2>Leena Das</h2>
-        <p>Mumbai to Pune</p>
-        <p>Request Date: <strong>12/05/2016</strong></p>
-      </a>    	
+      </a>
     </div>
 
   </ion-content>

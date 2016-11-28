@@ -1,12 +1,24 @@
 <ion-view title="{{title}}">
 
-  <ion-content ng-controller="newRequestCtrl" class="new-request-wrapper">
+  <ion-content ng-controller="requestCtrl" class="new-request-wrapper">
 
     <div class="content-wrapper">
 
       <form name="requestForm" class="requestForm" novalidate ng-submit="requestFormSubmit(requestForm.$valid)">
 
         <div class="list">
+
+          <div class="item">
+            <label class="item-input item-select">
+              <div class="input-label">Select Mode</div>
+              <select ng-model="mode" ng-change="changeMode()">
+                <option value="air">Air</option>
+                <option value="rail">Rail</option>
+                <option value="car">Car</option>
+                <option value="bus">Bus</option>
+              </select>
+            </label>
+          </div>
 
         	<div class="item" ng-class="{ 'has-error' : (requestForm.visitPurpose.$invalid && submitted && !visitPurposefocused)}">
             <label class="item-input">
@@ -58,7 +70,7 @@
             <p class="error help-block" ng-show="requestForm.departureTime.$error.required && submitted && !departureTimefocused">Please select Departure Time.</p>
           </div>
 
-          <div class="item" ng-class="{ 'has-error' : (loginForm.password.$invalid && submitted && !pwdfocused)}">
+          <div class="item">
             <label class="item-input">
               <div class="input-label">Accommodation Required</div>
               <label class="toggle toggle-positive">
@@ -70,25 +82,25 @@
             </label>
           </div>
 
-          <div ng-show="accomodationStatus" class="item" ng-class="{ 'has-error' : (requestForm.accomodationDate.$invalid && submitted
-          && !accomodationDatefocused)}">
+          <div ng-show="accomodationStatus" class="item" ng-class="{ 'has-error' : (requestForm.accomodationFromDate.$invalid && submitted
+          && !accomodationFromDateFocused)}">
             <label class="item-input">
               <div class="input-label">Accomodation From Date</div>
-              <input type="date" name="accomodationDate" ng-model="accomodationDate" ng-focus="accomodationDatefocused=true" ng-blur="accomodationDatefocused=false" />
+              <input type="date" name="accomodationFromDate" ng-model="accomodationFromDate" ng-focus="accomodationFromDateFocused=true" ng-blur="accomodationFromDateFocused=false" ng-required="accomodationStatus"/>
             </label>
-            <p class="error help-block" ng-show="requestForm.accomodationDate.$error.required && submitted && !accomodationDatefocused">Please select Accomodation From Date.</p>
+            <p class="error help-block" ng-show="requestForm.accomodationFromDate.$error.required && submitted && !accomodationFromDateFocused">Please select Accomodation From Date.</p>
           </div>
 
-          <div ng-show="accomodationStatus" class="item" ng-class="{ 'has-error' : (requestForm.accomodationTime.$invalid && submitted
-          && !accomodationTimefocused)}">
+          <div ng-show="accomodationStatus" class="item" ng-class="{ 'has-error' : (requestForm.accomodationToDate.$invalid && submitted
+          && !accomodationToDateFocused)}">
             <label class="item-input">
               <div class="input-label">Accomodation To Date</div>
-              <input type="date" name="accomodationTime" ng-model="accomodationTime" ng-focus="accomodationTimefocused=true" ng-blur="accomodationTimefocused=false" />
+              <input type="date" name="accomodationToDate" ng-model="accomodationToDate" ng-focus="accomodationToDateFocused=true" ng-blur="accomodationToDateFocused=false" ng-required="accomodationStatus" />
             </label>
-            <p class="error help-block" ng-show="requestForm.accomodationTime.$error.required && submitted && !accomodationTimefocused">Please select Accomodation To Date.</p>
+            <p class="error help-block" ng-show="requestForm.accomodationToDate.$error.required && submitted && !accomodationToDateFocused">Please select Accomodation To Date.</p>
           </div>
 
-          <div class="item" ng-class="{ 'has-error' : (loginForm.password.$invalid && submitted && !pwdfocused)}">
+          <div class="item">
             <label class="item-input">
               <div class="input-label">Transportation Required</div>
               <label class="toggle toggle-positive">
@@ -113,7 +125,10 @@
             <p class="error help-block" ng-show="submitted && !validateApproverStatus">Please select Approver.</p>
           </div>
 
-          <button type="submit" class="button submit-button button-block button-positive">Submit</button>
+          <div>
+            <button ng-if="!requestId" type="submit" class="button submit-button button-block button-positive">Submit</button>
+            <button ng-if="requestId" type="submit" class="button submit-button button-block button-positive">Update</button>
+          </div>
         </div>
       </form>
 

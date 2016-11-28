@@ -1,6 +1,6 @@
 var myApp = angular.module('starter');
 
-myApp.controller('splashCtrl', ['$window', '$state', function($window, $state, $cordovaSQLite) {
+myApp.controller('splashCtrl', ['$window', '$state', function($window, $state) {
   var height = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
   var calculatedHeight = (height);
   $('.splash-wrapper .main-wrapper').css('height', calculatedHeight);
@@ -11,7 +11,7 @@ myApp.controller('splashCtrl', ['$window', '$state', function($window, $state, $
 
 }]);
 
-myApp.controller('loginCtrl', ['$window', '$scope', '$state', '$location', '$http', '$cordovaSQLite', function($window, $scope, $state, $location, $http, $cordovaSQLite) {
+myApp.controller('loginCtrl', ['$window', '$scope', '$location', '$http', '$cordovaSQLite', function($window, $scope, $location, $http, $cordovaSQLite) {
 
   var height = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
   var calculatedHeight = (height);
@@ -57,7 +57,7 @@ myApp.controller('loginCtrl', ['$window', '$scope', '$state', '$location', '$htt
 
 }]);
 
-myApp.controller('appCtrl', ['$window', '$state', '$scope', function($window, $state, $scope) {
+myApp.controller('appCtrl', ['$state', '$scope', function($state, $scope) {
   $scope.logout = function() {
     $state.go('login');
   }
@@ -76,10 +76,62 @@ myApp.controller('homeCtrl', ['$scope', '$state', function($scope, $state) {
 
 }]);
 
-myApp.controller('newRequestCtrl', ['$scope', '$state', '$cordovaSQLite', '$location', function($scope, $state, $cordovaSQLite, $location) {
+myApp.controller('requestCtrl', ['$scope', '$cordovaSQLite', '$state', 'Request', '$ionicLoading', function($scope, $cordovaSQLite, $state, Request, $ionicLoading) {
 
-  $scope.title = "Create Request";
   var mode = $state.params.mode;
+  $scope.requestId = $state.params.requestId;
+
+  $scope.mode = mode;
+
+  $scope.requestData = [];
+  $scope.requestData = null;
+
+  if($scope.requestId) {
+    $scope.title = "Update Request";
+
+    $ionicLoading.show({
+      content: 'Loading',
+      animation: 'fade-in',
+      showBackdrop: true,
+      maxWidth: 200,
+      showDelay: 0
+    });
+
+    $scope.updateRequestData = function() {
+      Request.get($scope.requestId, 'MyRequest').then(function(data) {
+        $scope.requestData = data;
+        $ionicLoading.hide();
+
+        $scope.visitPurpose = data.myRequests[0].visit_purpose;
+        $scope.fromPlace = data.myRequests[0].depart_from;
+        $scope.destination = data.myRequests[0].destination;
+        $scope.departureDate = new Date(data.myRequests[0].departure_date);
+        $scope.departureTime = new Date(data.myRequests[0].departure_time);
+
+        if(data.myRequests[0].accomodation_required == 'Yes') {
+          accomodationStatus = 'Yes';
+          $scope.accomodationStatus = true;
+          $scope.accomodationFromDate = new Date(data.myRequests[0].accomodation_from_date);
+          $scope.accomodationToDate = new Date(data.myRequests[0].accomodation_to_date);
+        }
+
+        if(data.myRequests[0].transportation_status == 'Yes') {
+          transportationStatus = 'Yes';
+          $scope.transportationStatus = true;
+        }
+
+        $scope.approver = data.myRequests[0].approver;
+      });
+    }
+
+    $scope.updateRequestData();
+  } else {
+    $scope.title = "Create Request";
+  }
+
+  $scope.changeMode = function() {
+    mode = $scope.mode;
+  };
 
   $scope.validateFromPlace = function() {
     if($scope.fromPlace) {
@@ -99,15 +151,6 @@ myApp.controller('newRequestCtrl', ['$scope', '$state', '$cordovaSQLite', '$loca
     }
   };
 
-  $scope.save = function(dataToSave) {
-      $cordovaSQLite.execute(db, 'INSERT INTO MyRequest (visit_purpose, depart_from, destination, departure_date, departure_time, accomodation_required, accomodation_from_date, accomodation_to_date, transportation_status, approver, mode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', dataToSave)
-          .then(function(result) {
-              $location.path('app/my-request');
-          }, function(error) {
-              console.log("Error on saving: " + error.message);
-          })
-  }
-
   $scope.requestFormSubmit = function(isValid) {
         $scope.submitted = true;
         $scope.validateFromStatus = false;
@@ -125,21 +168,23 @@ myApp.controller('newRequestCtrl', ['$scope', '$state', '$cordovaSQLite', '$loca
               departureDate        = '',
               departureTime        = '',
               accomodationStatus   = 'No',
-              accomodationDate     = '',
-              accomodationTime     = '',
+              accomodationFromDate = '',
+              accomodationToDate   = '',
               transportationStatus = 'No',
-              approver             = '';
+              approver             = '',
+              activeStatus         = 1,
+              remarks              = '';
 
           visitPurpose = $scope.visitPurpose;
           fromPlace    = $scope.fromPlace;
           destination  = $scope.destination;
-          departureDate = $scope.departureDate;
-          departureTime = $scope.departureTime;
+          departureDate = new Date($scope.departureDate).getTime();
+          departureTime = new Date($scope.departureTime).getTime();
 
-          if($scope.accomodationDate ) {
+          if($scope.accomodationStatus) {
             accomodationStatus = 'Yes';
-            accomodationDate = $scope.accomodationDate;
-            accomodationTime = $scope.accomodationTime;
+            accomodationFromDate = new Date($scope.accomodationFromDate).getTime();
+            accomodationToDate = new Date($scope.accomodationToDate).getTime();
           }
 
           if($scope.transportationStatus) {
@@ -148,11 +193,28 @@ myApp.controller('newRequestCtrl', ['$scope', '$state', '$cordovaSQLite', '$loca
 
           approver = $scope.approver;
 
-          var dataToSave = [visitPurpose, fromPlace, destination, departureDate, departureTime, accomodationStatus, accomodationDate, accomodationTime, transportationStatus, approver, mode];
+          var dataToSave = [visitPurpose, fromPlace, destination, departureDate, departureTime, accomodationStatus, accomodationFromDate, accomodationToDate, transportationStatus, approver, mode, activeStatus, remarks];
 
-          $scope.save(dataToSave);
+          if($scope.requestId) {
+            dataToSave.push($scope.requestId);
+            $scope.update(dataToSave);
+          } else {
+            $scope.save(dataToSave);
+          }
         }
   };
+
+  $scope.save = function(dataToSave) {
+    Request.add(dataToSave).then(function() {
+      $state.go('app.my-request', {}, {reload: true});
+    });
+  }
+
+  $scope.update = function(dataToSave) {
+    Request.update(dataToSave).then(function() {
+      $state.go('app.my-request', {}, {reload: true});
+    });
+  }
 
 }]);
 
@@ -160,6 +222,10 @@ myApp.controller('myRequestsCtrl', ['$scope', '$state', '$cordovaSQLite', '$ioni
 
   $scope.title = "My Request";
 
+  $scope.$on('$ionicView.beforeEnter', function(e, config) {
+    config.enableBack = false;
+  });
+
   $ionicLoading.show({
     content: 'Loading',
     animation: 'fade-in',
@@ -172,25 +238,25 @@ myApp.controller('myRequestsCtrl', ['$scope', '$state', '$cordovaSQLite', '$ioni
   $scope.requestData = null;
 
   $scope.updateRequestData = function() {
-    Request.all().then(function(data) {
-        $scope.requestData = data;
-        $ionicLoading.hide();
-      });
-    }
+    Request.all('MyRequest').then(function(data) {
+      $scope.requestData = data;
+      $ionicLoading.hide();
+    });
+  }
 
   $scope.updateRequestData();
 
-  $scope.requestDetailPage = function(requestId, approve) {
-    $state.go('app.request-detail', {requestId: requestId, action: approve});
+  $scope.requestDetailPage = function(requestId, status) {
+    $state.go('app.request-detail', {requestId: requestId, action: status});
   }
 
 }]);
 
-myApp.controller('requestDetailCtrl', ['$scope', '$state', 'Request', '$ionicLoading', function($scope, $state, Request, $ionicLoading) {
+myApp.controller('requestDetailCtrl', ['$scope', '$state', 'Request', '$ionicLoading', '$window', function($scope, $state, Request, $ionicLoading, $window) {
 
   $scope.title = "Request Details";
   var requestId = $state.params.requestId;
-  var action = $state.params.action;
+  $scope.action = $state.params.action;
 
   $ionicLoading.show({
     content: 'Loading',
@@ -204,20 +270,78 @@ myApp.controller('requestDetailCtrl', ['$scope', '$state', 'Request', '$ionicLoa
   $scope.requestData = null;
 
   $scope.updateRequestData = function() {
-    Request.get(requestId).then(function(data) {
-        $scope.requestData = data;
-        $ionicLoading.hide();
+    Request.get(requestId, 'MyRequest').then(function(data) {
+      $scope.requestData = data;
+      $ionicLoading.hide();
+    });
+  }
+
+  $scope.cancelRequest = function(requestId) {
+    var confirmCancel = confirm('Are you sure you want to cancel the request?');
+    if(confirmCancel) {
+      Request.cancel(requestId).then(function() {
+        $state.go('app.my-request', {}, { reload: true });
       });
     }
+  }
+
+  $scope.onRemarksInput = function() {
+    if($scope.remarks) {
+      $scope.remarksPending = false;
+    }
+  }
+
+  $scope.approval = function(status, requestId) {
+    $scope.remarksPending = true;
+    $scope.onRemarksInput();
+
+    var confirmApproval;
+    if(status == 'approve') {
+      confirmApproval = confirm('Are you sure you want to approve the request?');
+    } else if(status == 'reject') {
+      if(!$scope.remarksPending) {
+        confirmApproval = confirm('Are you sure you want to reject the request?');
+      }
+    }
+    if(confirmApproval) {
+      Request.updateApprovalStatus(status, requestId).then(function() {
+        $state.go('app.my-request', {}, { reload: true });
+      });
+    }
+  }
 
   $scope.updateRequestData();
 }]);
 
-myApp.controller('pendingApprovalCtrl', ['$scope', '$state', function($scope, $state) {
+myApp.controller('pendingApprovalCtrl', ['$scope', '$state', '$cordovaSQLite', '$ionicLoading', 'Request', function($scope, $state, $cordovaSQLite, $ionicLoading, Request) {
 
   $scope.title = "Pending Approvals";
 
-  $scope.requestDetailPage = function(requestId, approve) {
-    $state.go('app.request-detail', {requestId: requestId, action: approve});
+  $scope.$on('$ionicView.beforeEnter', function(e, config) {
+    config.enableBack = false;
+  });
+
+  $ionicLoading.show({
+    content: 'Loading',
+    animation: 'fade-in',
+    showBackdrop: true,
+    maxWidth: 200,
+    showDelay: 0
+  });
+
+  $scope.requestData = [];
+  $scope.requestData = null;
+
+  $scope.updateRequestData = function() {
+    Request.all('PendingApproval').then(function(data) {
+      $scope.requestData = data;
+      $ionicLoading.hide();
+    });
+  }
+
+  $scope.updateRequestData();
+
+  $scope.requestDetailPage = function(requestId, status) {
+    $state.go('app.request-detail', {requestId: requestId, action: status});
   }
 }]);

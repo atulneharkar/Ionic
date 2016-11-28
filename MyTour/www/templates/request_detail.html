@@ -27,6 +27,20 @@
       	<p>Ticket Date: <strong>20/9/2016</strong></p>
         </div>
       </div>
+
+      <div ng-if="action != 'approval'">
+        <a href="#/app/create-request/{{data.mode}}/{{data.id}}">Edit</a>
+        <span ng-click="cancelRequest({{data.id}});">Cancel Request</span>
+      </div>
+
+      <div ng-if="action == 'approval'">
+        <div ng-class="{ 'has-error' : (remarksPending)}">
+          <textarea ng-model="remarks" ng-input="onRemarksInput()"></textarea>
+          <p class="error help-block" ng-show="remarksPending"></p>
+        </div>
+        <span ng-click="approval('approve', {{data.id}});">Approve</span>
+        <span ng-click="approval('reject', {{data.id}});">Reject</span>
+      </div>
     </div>
 
   </ion-content>
